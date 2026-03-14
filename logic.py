@@ -58,7 +58,7 @@ class DB_Map():
             coordinates = cursor.fetchone()
             return coordinates
 
-    def create_graph(self, path, cities, color):
+    def create_graph(self, path, cities, color, marker):
         ax = plt.axes(projection=ccrs.PlateCarree())
         ax.stock_img()
         for city in cities:
@@ -66,7 +66,7 @@ class DB_Map():
             print(coordinates)
             if coordinates:
                 lat, lng = coordinates
-                plt.plot([lng], [lat], marker='X', color=color, transform=ccrs.PlateCarree())
+                plt.plot([lng], [lat], marker=marker, color=color, transform=ccrs.PlateCarree())
                 plt.text(lng+1, lat+1, city, horizontalalignment='left', transform=ccrs.PlateCarree())
         plt.savefig(path)
         plt.close()
