@@ -13,22 +13,32 @@ def handle_help(message):
     bot.send_message(message.chat.id, """Доступные команды:
       /start - Начать работу с ботом
       /help - Показать список команд
-      /show_city - Показать город на карте
-      /remember_city - Сохранить город
-      /show_my_cities - Показать сохраненные города""")
+      /show_city (city) (color) (marker) - Показать город на карте 
+      /remember_city - Сохранить город 
+      /show_my_cities - Показать сохраненные города
+      /draw_distance (city 1) (city 2) - shows a straight path between things""")
     # Допиши команды бота
 
 
 @bot.message_handler(commands=['show_city'])
 def handle_show_city(message):
-    city_name = message.text.split()[-2]
-    color = message.text.split()[-1] if len(message.text.split()) > 2 else 'black'
-    print(city_name, color)
+
+    spt = message.text.split()
+
+    city_name = spt[1] if len(spt) > 1 else "Tokyo"
+    color = spt[2] if len(spt) > 2 else "black"
+    marker = spt[3] if len(spt) > 3 else "."
+    
+    print(city_name, color, marker)
     # Реализуй отрисовку города по запросу
     user_id = message.chat.id
-    manager.create_graph(f"{user_id}.png", [city_name], color=color)
-    with open(f"{user_id}.png", 'rb') as photo:
-        bot.send_photo(user_id, photo)
+    
+    try:
+        manager.create_graph(f"{user_id}.png", [city_name], color=color, marker=marker)
+        with open(f"{user_id}.png", 'rb') as photo:
+            bot.send_photo(user_id, photo)
+    except:
+        bot.send_message(message.chat.id, "sorry couldnt execute")
 
 
 @bot.message_handler(commands=['draw_distance'])
@@ -52,7 +62,7 @@ def handle_remember_city(message):
         bot.send_message(message.chat.id, 'Такого города я не знаю. Убедись, что он написан на английском!')
 
 @bot.message_handler(commands=['show_my_cities'])
-def handle_show_visited_cities(message): 
+def handle_show_visited_cities(message):
     cities = manager.select_cities(message.chat.id)
     # Реализуй отрисовку всех городов
     if cities:
