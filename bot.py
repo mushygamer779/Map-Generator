@@ -52,7 +52,7 @@ def handle_remember_city(message):
         bot.send_message(message.chat.id, 'Такого города я не знаю. Убедись, что он написан на английском!')
 
 @bot.message_handler(commands=['show_my_cities'])
-def handle_show_visited_cities(message):
+def handle_show_visited_cities(message): 
     cities = manager.select_cities(message.chat.id)
     # Реализуй отрисовку всех городов
     if cities:
