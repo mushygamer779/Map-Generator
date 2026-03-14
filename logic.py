@@ -58,15 +58,16 @@ class DB_Map():
             coordinates = cursor.fetchone()
             return coordinates
 
-    def create_graph(self, path, cities):
+    def create_graph(self, path, cities, color):
         ax = plt.axes(projection=ccrs.PlateCarree())
         ax.stock_img()
         for city in cities:
             coordinates = self.get_coordinates(city)
+            print(coordinates)
             if coordinates:
                 lat, lng = coordinates
-                plt.plot([lng], [lat], marker='.', color='r', transform=ccrs.Geocentric())
-                plt.text(lng+3, lat+12, city, horizontalalignment='left', transform=ccrs.Geocentric())
+                plt.plot([lng], [lat], marker='X', color=color, transform=ccrs.PlateCarree())
+                plt.text(lng+1, lat+1, city, horizontalalignment='left', transform=ccrs.PlateCarree())
         plt.savefig(path)
         plt.close()
 
@@ -76,9 +77,9 @@ class DB_Map():
         city2_coordinates = self.get_coordinates(city2)
         fig, ax = plt.subplots(subplot_kw={'projection': ccrs.PlateCarree()})
         ax.stock_img()
-        plt.plot([city1_coordinates[1], city2_coordinates[1]], [city1_coordinates[0], city2_coordinates[0]], marker='o', color='r', linewidth=2, transform=ccrs.Geocentric())
-        plt.text(city1_coordinates[1]+3, city1_coordinates[0]+12, city1, horizontalalignment='left', transform=ccrs.Geocentric())
-        plt.text(city2_coordinates[1]+3, city2_coordinates[0]+12, city2, horizontalalignment='left', transform=ccrs.Geocentric())
+        plt.plot([city1_coordinates[1], city2_coordinates[1]], [city1_coordinates[0], city2_coordinates[0]], marker='x', color='black', linewidth=2, linestyle=':', transform=ccrs.PlateCarree())
+        plt.text(city1_coordinates[1]+3, city1_coordinates[0]+12, city1, horizontalalignment='left', transform=ccrs.PlateCarree())
+        plt.text(city2_coordinates[1]+3, city2_coordinates[0]+12, city2, horizontalalignment='left', transform=ccrs.PlateCarree())
         plt.savefig('distance.png')
         plt.close()
 
